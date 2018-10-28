@@ -32,18 +32,14 @@ object CoinChange {
     var memTable = Array.ofDim[Int](n + 1, coins.length + 1)
     for (j <- 0 to coins.length)
       memTable(0)(j) = 1
-    //print2DArray(memTable)
-    println(memTable(1)(3))
     for {
       i <- 1 to n
       j <- 1 to coins.length
     } {
-      //println(s"$i,$j")
       memTable(i)(j) = memTable(i)(j - 1) + (if (i - coins(j - 1) >= 0) memTable(i - coins(j - 1))(j) else 0)
     }
 
-    print2DArray(memTable)
-    10
+    memTable(n)(coins.length)
   }
 
   def print2DArray(arr: Array[Array[Int]]) = {
