@@ -72,6 +72,17 @@ object main {
       calculate(List(true, true, false, true, false, false, true, false, true),
         List(Or, And, Xor, Xor, And, And, Or, Xor)))
 
+    println(calculate(List(true, false, true), List(Or, And)))
+
+    println(calculate(List(true, true, false, true), List(Or, And, Xor)))
+
+  }
+
+  def displayMat(mat:Array[Array[Int]]) = {
+    mat.foreach(x=>{
+      println("")
+      x.foreach(y=>print(s"$y "))
+    })
   }
 
   def calculate(flags: List[Boolean], ops: List[FlagOps]) = {
@@ -93,18 +104,21 @@ object main {
       val leftFalse = mapF(j)(k - j + 1)
       val rightFalse = mapF(k + 1)(i + j - 1 - k)
 
+      //println(s"$i,$j,$k,${k-j+1},${i+j-1-k}")
+
       ops(k) match {
         case Or =>
-          mapT(j)(i) = leftTrue * rightFalse + leftFalse * rightTrue + leftTrue * rightTrue
-          mapF(j)(i) = leftFalse * rightFalse
+          mapT(j)(i) += leftTrue * rightFalse + leftFalse * rightTrue + leftTrue * rightTrue
+          mapF(j)(i) += leftFalse * rightFalse
         case And => 0
-          mapT(j)(i) = rightTrue * leftTrue
-          mapF(j)(i) = leftTrue * rightFalse + leftFalse * rightTrue + leftFalse * rightFalse
+          mapT(j)(i) += rightTrue * leftTrue
+          mapF(j)(i) += leftTrue * rightFalse + leftFalse * rightTrue + leftFalse * rightFalse
         case Xor =>
-          mapT(j)(i) = rightTrue * leftFalse + rightFalse * leftTrue
-          mapF(j)(i) = leftTrue * rightTrue + leftFalse * rightFalse
+          mapT(j)(i) += rightTrue * leftFalse + rightFalse * leftTrue
+          mapF(j)(i) += leftTrue * rightTrue + leftFalse * rightFalse
       }
     }
+    //displayMat(mapT)
     mapT(0)(flags.length)
   }
 
