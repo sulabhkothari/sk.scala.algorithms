@@ -34,3 +34,32 @@ object Combinations extends App {
   def factorial(num: Int) = (2 to num).foldLeft(1){case(f,x) => f * x}
   println(factorial(n)/(factorial(k) * factorial(n - k)))
 }
+
+object CC extends App {
+  val str = "abcdefgh".toCharArray
+  val k = 4
+  val d = mutable.Set.empty[String]
+
+  println(str.length)
+  val cc = str.slice(0, k)
+  println(cc.mkString(""))
+  var count = 1
+
+  combinate(0,k)
+
+  def combinate(arrPtr: Int, elPtr: Int): Unit = {
+    var ptr = elPtr
+    while(arrPtr < k && ptr < str.length) {
+      combinate(arrPtr + 1, ptr)
+      cc(arrPtr) = str(ptr)
+      count += 1
+      println(cc.mkString(""))
+      d.add(cc.mkString(""))
+
+      ptr = ptr + 1
+    }
+    if(arrPtr < k) cc(arrPtr) = str(arrPtr)
+  }
+
+  println(count)
+}
