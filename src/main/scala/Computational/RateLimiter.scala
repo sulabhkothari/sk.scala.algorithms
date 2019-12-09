@@ -1,4 +1,4 @@
-package Computational
+package Computational.test
 
 import org.joda.time.DateTime
 
@@ -22,7 +22,6 @@ case class RateLimiterWithArray(bucketSizeInSeconds: Long, windowSizeInSeconds: 
       }
       start = (start + slide) % windowCount
       println(s"New Start of Arr: $start")
-      //println(s"${startDateTime.getMillis}, ")
       startDateTime = new DateTime(startDateTime.getMillis + slide * bucketSizeInSeconds * 1000)
     }
   }
@@ -68,4 +67,31 @@ object RateLimiterRunner extends App {
     }
   }
   println(sum)
+}
+
+import org.scalatest._
+
+class ExampleSpec extends Matchers with WordSpecLike {
+  "Rate Limiter" should {
+    "limit rate" in {
+      val l = RateLimiterWithArray(1, 10, 100)
+      for (i <- 1 to 200) {
+        i match {
+          case 99 =>
+            println("Sleeping for sometime...")
+            l.arr.sum shouldBe 98
+            l.arr shouldBe Array(98,0,0,0,0,0,0,0,0,0)
+            Thread.sleep(8000)
+          case 150 =>
+            println("Sleeping for sometime...")
+            l.arr shouldBe Array(98,0,0,0,0,0,0,0,2,0)
+            Thread.sleep(5000)
+          case _ =>
+            println(s"Request# $i")
+            l.sendRequest
+        }
+      }
+      l.arr shouldBe Array(0,0,0,50,0,0,0,0,2,0)
+    }
+  }
 }
