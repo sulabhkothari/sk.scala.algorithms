@@ -1,5 +1,7 @@
 package DynamicProgramming
 
+import java.util.concurrent.CountDownLatch
+
 import scala.collection.mutable._
 
 object ArrayPartition extends App {
@@ -57,13 +59,13 @@ object ArrayPartitioning {
 }
 
 object MissingNumber extends App {
-  val arr = Array(9,8,5,1,3,2,7,6,-1)
+  val arr = Array(9, 8, 5, 1, 3, 2, 7, 6, -1)
   var i = 1
-  while(i <= arr.length) {
-    if(arr(i-1) > 0 && arr(i-1) != i && arr(i-1) != arr(arr(i-1)-1)){
-      val temp = arr(i-1) //9
-      val temp2 = arr(temp-1) // 1
-      arr(i-1) = temp2
+  while (i <= arr.length) {
+    if (arr(i - 1) > 0 && arr(i - 1) != i && arr(i - 1) != arr(arr(i - 1) - 1)) {
+      val temp = arr(i - 1) //9
+      val temp2 = arr(temp - 1) // 1
+      arr(i - 1) = temp2
       arr(temp - 1) = temp
       //println(s"$i,${arr(i-1)},${arr(arr(i-1)-1)}")
     }
@@ -72,6 +74,30 @@ object MissingNumber extends App {
     }
   }
 
-
   println(arr.mkString(","))
+}
+
+object CounddownLatchApp extends App {
+  println("Starting...")
+  val countDownLatch = new CountDownLatch(2)
+  val hello = (num: Int) => new Thread(new Runnable {
+    override def run() {
+      Thread.sleep(2000)
+      println(s"hello world: $num")
+      countDownLatch.countDown()
+    }
+  })
+  hello(1).start
+  hello(2).start
+
+  //runThread.start()
+  //runThread(2).start()
+  //runThread(3).start()
+
+  //Thread.sleep(10000)
+
+  countDownLatch.await()
+
+  println("Complete!")
+
 }
