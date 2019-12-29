@@ -1,6 +1,6 @@
 package DynamicProgramming
 
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable._
 
 object ArrayPartition extends App {
   //val random = new scala.util.Random()
@@ -54,4 +54,24 @@ object ArrayPartitioning {
 
     Some(ab.toArray)
   }
+}
+
+object MissingNumber extends App {
+  val arr = Array(9,8,5,1,3,2,7,6,-1)
+  var i = 1
+  while(i <= arr.length) {
+    if(arr(i-1) > 0 && arr(i-1) != i && arr(i-1) != arr(arr(i-1)-1)){
+      val temp = arr(i-1) //9
+      val temp2 = arr(temp-1) // 1
+      arr(i-1) = temp2
+      arr(temp - 1) = temp
+      //println(s"$i,${arr(i-1)},${arr(arr(i-1)-1)}")
+    }
+    else {
+      i += 1
+    }
+  }
+
+
+  println(arr.mkString(","))
 }
